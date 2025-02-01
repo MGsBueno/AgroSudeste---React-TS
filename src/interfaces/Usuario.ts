@@ -1,5 +1,5 @@
 interface Usuario {
-    conta: string;
-    senha: string;
+  conta: string;
+  senha: string;
 }
 export default Usuario;

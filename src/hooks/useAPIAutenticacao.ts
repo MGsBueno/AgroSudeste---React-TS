@@ -18,10 +18,18 @@ const useAPIAutenticacao = () => {
         throw error;
       });
 
+  // Envia um Usuario para o cadastro e recebe de volta um Token, ou erro se usuário já existe
   const cadastro = (usuario: Usuario) =>
     axiosInstance
       .post<TokenResponse>(URL_AUTENTICACAO + "/cadastro", usuario)
-      .then((res) => res.data)
+      .then((res) => {
+        // Verifica se o token está vazio, indicando que o usuário já existe
+        if (res.data.token === "") {
+          throw new Error("Usuário já existe");
+        }
+        console.log("Cadastro com Sucesso", res.data);
+        return res.data;
+      })
       .catch((error) => {
         tratarErro(error);
         throw error;

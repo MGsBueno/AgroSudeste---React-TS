@@ -26,12 +26,7 @@ const CadastroForm = () => {
     useEfetuarCadastro();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setFocus("conta");
-    setTentouCadastrar(false);
-    setUsuarioLogado("");
-  }, []);
-
+  // Inicializa o form e usa o setFocus após a renderização
   const {
     register,
     handleSubmit,
@@ -39,21 +34,22 @@ const CadastroForm = () => {
     formState: { errors },
   } = useForm<FormCadastro>({ resolver: zodResolver(schema) });
 
+  useEffect(() => {
+    setFocus("conta");
+    setTentouCadastrar(false);
+    setUsuarioLogado("", ""); // Evitar mudanças de estado fora do corpo do render
+  }, [setTentouCadastrar, setUsuarioLogado, setFocus]);
+
   const submit = ({ conta, senha }: FormCadastro) => {
     const usuario: Usuario = { conta, senha };
 
-    efetuarCadastro(usuario, {
-      onSuccess: () => {
-        const usuarioLogado = useUsuarioStore((state) => state.usuarioLogado);
-        const setUsuarioLogado = useUsuarioStore(
-          (state) => state.setUsuarioLogado
-        );
-        navigate("/"); // Redireciona para login após cadastro
-      },
-    });
+    efetuarCadastro(usuario);
   };
 
-  if (errorCadastro) throw errorCadastro;
+  if (errorCadastro) {
+    // Tratamento de erro, você pode passar uma mensagem mais específica
+    console.error("Erro no cadastro: ", errorCadastro);
+  }
 
   return (
     <>
@@ -104,7 +100,7 @@ const CadastroForm = () => {
         <div className="row">
           <div className="offset-lg-1 col-lg-5">
             <button type="submit" className="btn btn-outline-success">
-              <img src={CadastroIcon} /> Cadastrar
+              <img src={CadastroIcon} alt="Cadastro" /> Cadastrar
             </button>
           </div>
         </div>

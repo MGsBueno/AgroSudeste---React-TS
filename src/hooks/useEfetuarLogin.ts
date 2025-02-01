@@ -13,11 +13,9 @@ const useEfetuarLogin = () => {
 
       if (resposta?.token) {
         localStorage.setItem("token", resposta.token);
-        localStorage.setItem("usuario", usuario.nome); // Apenas o nome
-
-        setUsuarioLogado(usuario.nome, resposta.token); // Atualiza Zustand
+        localStorage.setItem("usuario", usuario.conta);
+        setUsuarioLogado(usuario.conta, resposta.token);
       }
-
       return resposta;
     },
   });

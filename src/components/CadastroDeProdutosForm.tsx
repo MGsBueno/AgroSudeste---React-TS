@@ -93,8 +93,8 @@ const CadastroDeProdutosForm = () => {
       setValue("descricao", produtoSelecionado.descricao);
       setValue("categoria", String(produtoSelecionado.categoria.id));
       setValue(
-          "data_cadastro",
-          dayjs(produtoSelecionado.dataCadastro).format("DD/MM/YYYY")
+        "data_cadastro",
+        dayjs(produtoSelecionado.dataCadastro).format("DD/MM/YYYY")
       );
       setValue("preco", produtoSelecionado.preco);
       setValue("qtd_estoque", produtoSelecionado.qtdEstoque);
@@ -124,7 +124,7 @@ const CadastroDeProdutosForm = () => {
     return () => {
       // setFocus("nome");
       setProdutoSelecionado({} as Produto);
-    }
+    };
   }, []);
 
   // useEffect(() => {
@@ -263,9 +263,9 @@ const CadastroDeProdutosForm = () => {
                 }
               >
                 <option value="0">Selecione uma categoria</option>
-                <option value="1">Fruta</option>
-                <option value="2">Legume</option>
-                <option value="3">Verdura</option>
+                <option value="1">Maquinarios</option>
+                <option value="2">Implementos</option>
+                <option value="3">Insumos</option>
               </select>
               <div className="invalid-feedback">
                 {errors.categoria?.message}
@@ -396,7 +396,7 @@ const CadastroDeProdutosForm = () => {
               <button
                 id="botao"
                 type="submit"
-                style={{width: "100px"}}
+                style={{ width: "100px" }}
                 className="btn btn-primary btn-sm d-flex align-items-center me-3"
               >
                 {produtoSelecionado.id ? (

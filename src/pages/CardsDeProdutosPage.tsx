@@ -1,5 +1,5 @@
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import useProdutosPaginadosPeloNomeDaCategoria from "../hooks/useProdutosPaginadosPeloNomeDaCategoria";
 import useCarrinhoStore from "../store/useCarrinhoStore"; // Store para o carrinho
@@ -13,6 +13,7 @@ const primeiraLetraMaiuscula = (palavra: string) => {
 const CardsDeProdutosPage = () => {
   const tamanho = 18;
   const { nomeCategoria } = useParams<{ nomeCategoria: string }>(); // Tipando o parâmetro
+  const navigate = useNavigate(); // Usado para navegação programática
 
   const {
     data,
@@ -59,7 +60,10 @@ const CardsDeProdutosPage = () => {
           page.itens.map((produto: Produto) => (
             <div key={produto.id} className="col-xl-2 col-md-3 col-sm-4 col-6">
               <Card
+                id={produto.id!}
                 imagem={produto.imagem}
+                qtdEstoque={produto.qtdEstoque}
+                categoria={produto.categoria.nome}
                 titulo={produto.nome}
                 descricao={produto.descricao}
                 preco={produto.preco.toLocaleString("pt-BR", {

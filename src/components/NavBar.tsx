@@ -6,7 +6,6 @@ import carrinho from "../assets/carrinho.png";
 
 function NavBar() {
   // Pegando o usuário logado da store do Zustand
-  
   const usuarioLogado = useUsuarioStore((state) => state.usuarioLogado);
   const setUsuarioLogado = useUsuarioStore((state) => state.setUsuarioLogado);
 
@@ -101,55 +100,91 @@ function NavBar() {
               </li>
             </ul>
 
-            {/* Carrinho à direita do menu para telas grandes */}
+            {/* Carrinho e valor total à direita do menu */}
+            <div className="ms-auto d-flex align-items-center">
+              {/* Exibição para telas grandes */}
+              <div className="d-none d-lg-block position-relative">
+                <Link to="/carrinho" style={{ textDecoration: "none" }}>
+                  <img
+                    src={carrinho}
+                    alt="Carrinho"
+                    style={{ width: "55px" }}
+                  />
+                  {/* Exibindo a quantidade de itens no carrinho */}
+                  {quantidadeTotal > 0 && (
+                    <span
+                      className="badge bg-danger position-absolute"
+                      style={{
+                        top: "-5px",
+                        right: "-5px",
+                        fontSize: "0.8rem",
+                        padding: "5px",
+                      }}
+                    >
+                      {quantidadeTotal}
+                    </span>
+                  )}
+                </Link>
+              </div>
 
-            <div className="ms-auto d-none d-lg-block position-relative">
-              <Link to="/carrinho" style={{ textDecoration: "none" }}>
-                <img src={carrinho} alt="Carrinho" style={{ width: "55px" }} />
-                {/* Exibindo a quantidade de itens no carrinho */}
+              {/* Exibindo o valor total abaixo do carrinho */}
+              {quantidadeTotal > 0 && (
+                <div
+                  className="d-none d-lg-block"
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "white",
+                    marginLeft: "10px",
+                  }}
+                >
+                  R${" "}
+                  {valorTotal.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
+              )}
+
+              {/* Exibição para telas pequenas */}
+              <div className="d-block d-lg-none ms-3">
+                <Link to="/carrinho" style={{ textDecoration: "none" }}>
+                  <img
+                    src={carrinho}
+                    alt="Carrinho"
+                    style={{ width: "40px", marginRight: "10px" }}
+                  />
+                  {/* Exibindo a quantidade de itens no carrinho */}
+                  {quantidadeTotal > 0 && (
+                    <span
+                      className="badge bg-danger"
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "5px",
+                      }}
+                    >
+                      {quantidadeTotal}
+                    </span>
+                  )}
+                </Link>
+                {/* Exibindo o valor total para telas pequenas */}
                 {quantidadeTotal > 0 && (
-                  <span
-                    className="badge bg-danger position-absolute"
+                  <div
+                    className="d-block"
                     style={{
-                      top: "-5px",
-                      right: "-5px",
                       fontSize: "0.8rem",
-                      padding: "5px",
+                      color: "white",
+                      marginTop: "5px",
                     }}
                   >
-                    {quantidadeTotal}
-                  </span>
+                    R${" "}
+                    {valorTotal.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </div>
                 )}
-              </Link>
+              </div>
             </div>
-            <div
-              className=" position-absolute"
-              style={{
-                bottom: "-5px",
-                right: "37rem",
-                fontSize: "0.8rem",
-                padding: "5px",
-                color: "white",
-              }}
-            >
-              R${" "}
-              {valorTotal.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </div>
-            {/* Exibindo o valor total abaixo do carrinho */}
-            {quantidadeTotal > 0 && (
-              <div
-                className="d-flex justify-content-center mt-2 d-none d-lg-block"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  alignItems: "center",
-                }}
-              ></div>
-            )}
           </div>
         </div>
       </nav>

@@ -47,21 +47,26 @@ const Card: React.FC<Props> = ({
   };
 
   return (
-    <div className="card h-100 border-0" onClick={handleClick}>
-      <img src={`/${imagem}`} className="card-img-top" alt={nome} />
-      <div className="card-body d-flex flex-column justify-content-between">
-        <div>
-          <h5 className="card-title">{nome}</h5>
-          <p className="card-text">{descricao}</p>
+    <div className="card h-100 border-0">
+      <div className="h-100 border-0" onClick={handleClick}>
+        <img src={`/${imagem}`} className="card-img-top" alt={nome} />
+        <div className="card-body d-flex flex-column justify-content-between">
+          <div>
+            <h5 className="card-title">{nome}</h5>
+            <p className="card-text">{descricao}</p>
+          </div>
+          <p
+            className="card-text fw-bold"
+            style={{ color: "rgb(220, 53, 69)" }}
+          >
+            <strong>Preço:</strong>
+            <br />
+            {preco.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </p>
         </div>
-        <p className="card-text fw-bold" style={{ color: "rgb(220, 53, 69)" }}>
-          <strong>Preço:</strong>
-          <br />
-          {preco.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          })}
-        </p>
       </div>
       <div className="card-footer border-0 p-0 mb-3">{footer}</div>
     </div>

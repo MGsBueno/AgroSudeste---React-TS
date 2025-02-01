@@ -63,14 +63,12 @@ const CardsDeProdutosPage = () => {
                 id={produto.id!}
                 imagem={produto.imagem}
                 qtdEstoque={produto.qtdEstoque}
-                categoria={produto.categoria.nome}
-                titulo={produto.nome}
+                categoria={produto.categoria}
+                nome={produto.nome}
                 descricao={produto.descricao}
-                preco={produto.preco.toLocaleString("pt-BR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                  useGrouping: true,
-                })}
+                disponivel={produto.disponivel}
+                dataCadastro={produto.dataCadastro}
+                preco={produto.preco}
                 footer={
                   <input
                     type="button"

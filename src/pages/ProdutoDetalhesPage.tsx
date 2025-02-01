@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap"; // Importando o Modal e o Button do react-bootstrap
 import useRemoverProduto from "../hooks/useRemoverProduto"; // Importando o hook para remover o produto
+import useProdutosStore from "../store/useProdutosStore"; // Importando o hook da store
+import Produto from "../interfaces/Produto"; // Importando a interface Produto
 
 const ProdutoDetalhesPage = () => {
   const location = useLocation();
-  const produto = location.state; // Obtém os dados do produto passados pelo 'navigate'
+  const produto = location.state as Produto; // Tipando o produto como Produto usando o TypeScript
   const navigate = useNavigate(); // Usado para navegar para outras páginas
 
   // Estado para controlar o modal de sucesso
@@ -14,13 +16,31 @@ const ProdutoDetalhesPage = () => {
   // Hook para remover o produto
   const { mutate: removerProduto, isLoading, isError } = useRemoverProduto();
 
+  // Acessando a função de setProdutoSelecionado
+  const setProdutoSelecionado = useProdutosStore(
+    (state) => state.setProdutoSelecionado
+  );
+
   if (!produto) {
     return <p>Produto não encontrado!</p>;
   }
 
   // Função chamada ao clicar no botão "Alterar"
   const handleAlterar = () => {
-    navigate(`/produto/alterar/${produto.id}`, { state: produto }); // Navega para a página de alteração, passando os dados do produto
+    // Atualiza o estado com todos os valores do produto selecionado antes de redirecionar
+    setProdutoSelecionado({
+      nome: produto.nome,
+      categoria: produto.categoria,
+      preco: produto.preco,
+      imagem: produto.imagem,
+      descricao: produto.descricao,
+      dataCadastro: produto.dataCadastro,
+      qtdEstoque: produto.qtdEstoque,
+      disponivel: produto.disponivel, // Agora estamos usando o tipo boolean
+      id: produto.id,
+    });
+    console.log(produto);
+    navigate(`/cadastrar-produto/`, { state: produto }); // Navega para a página de alteração, passando os dados do produto
   };
 
   // Função chamada ao clicar no botão "Remover"
@@ -38,7 +58,7 @@ const ProdutoDetalhesPage = () => {
   // Função para redirecionar para a página inicial após fechar o modal
   const handleCloseModal = () => {
     setShowModal(false); // Fecha o modal
-    navigate("/"); // Redireciona para a página inicial
+    navigate("/"); // Redireciona para a página inicial após a remoção
   };
 
   return (
@@ -49,19 +69,20 @@ const ProdutoDetalhesPage = () => {
         <div className="col-md-6 mb-3">
           <img
             src={`/${produto.imagem}`}
-            alt={produto.titulo}
+            alt={produto.nome}
             className="img-fluid"
           />
         </div>
         {/* Coluna para o conteúdo do produto */}
         <div className="col-md-6 mb-3">
-          <h3>{produto.titulo}</h3>
+          <h3>{produto.nome}</h3>
           <p>{produto.descricao}</p>
           <p>
             <strong>Preço:</strong> R$ {produto.preco}
           </p>
           <p>
-            <strong>Categoria:</strong> {produto.categoria}
+            <strong>Categoria:</strong> {produto.categoria.nome}{" "}
+            {/* Exibindo o nome da categoria */}
           </p>
           <p>
             <strong>Quantidade em estoque:</strong> {produto.qtdEstoque}

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import useProdutosComPaginacao from "../hooks/useProdutosComPaginacao";
 import useRemoverProduto from "../hooks/useRemoverProduto";
 import useProdutosStore from "../store/useProdutosStore";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 const TabelaDeProdutos = () => {
   const pagina = useProdutosStore((s) => s.pagina);
@@ -17,25 +17,20 @@ const TabelaDeProdutos = () => {
   const { mutate: removerProduto, error: errorRemocaoProduto } =
     useRemoverProduto();
 
+  const [ordem, setOrdem] = useState("desc"); // Ordenação inicial (decrescente)
+  const [campo, setCampo] = useState("id"); // Coluna inicial (id)
+
   const {
     data: resultadoPaginado,
     isPending: carregandoProdutos,
     error: errorProdutos,
-  } = useProdutosComPaginacao({ pagina, tamanho, nome });
+  } = useProdutosComPaginacao({ pagina, tamanho, nome, campo, ordem });
 
   // Estado para controlar quais produtos estão sendo removidos
   const [removendoProdutoId, setRemovendoProdutoId] = useState<number | null>(
     null
   );
 
-  if (carregandoProdutos) return <h6>Carregando...</h6>;
-
-  if (errorProdutos) throw errorProdutos;
-  if (errorRemocaoProduto) throw errorRemocaoProduto;
-
-  const produtos = resultadoPaginado.itens;
-
-  // Função para simular a remoção do produto
   const handleRemoverProduto = async (produtoId: number) => {
     setRemovendoProdutoId(produtoId); // Marca o produto como removido (muda o estado para exibir o spinner)
 
@@ -54,18 +49,63 @@ const TabelaDeProdutos = () => {
     }
   };
 
+  const handleOrdenar = useCallback((novaColuna: string) => {
+    setCampo(novaColuna);
+    setOrdem((prevOrdem) => (prevOrdem === "asc" ? "desc" : "asc"));
+  }, []);
+
+  if (carregandoProdutos) return <h6>Carregando...</h6>;
+
+  if (errorProdutos) throw errorProdutos;
+  if (errorRemocaoProduto) throw errorRemocaoProduto;
+
+  const produtos = resultadoPaginado.itens;
+
   return (
     <div className="table-responsive">
       <table className="table table-hover table-bordered table-sm">
         <thead>
           <tr>
-            <th className="align-middle text-center">Id</th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("id")}
+            >
+              Id {campo === "id" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
             <th className="align-middle text-center">Imagem</th>
-            <th className="align-middle text-center">Categoria</th>
-            <th className="align-middle text-center">Nome</th>
-            <th className="align-middle text-center">Data de Cadastro</th>
-            <th className="align-middle text-center">Quantidade</th>
-            <th className="align-middle text-center">Preço</th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("categoria.nome")}
+            >
+              Categoria{" "}
+              {campo === "categoria.nome" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("nome")}
+            >
+              Nome {campo === "nome" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("dataCadastro")}
+            >
+              Data de Cadastro{" "}
+              {campo === "dataCadastro" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("qtdEstoque")}
+            >
+              Quantidade{" "}
+              {campo === "qtdEstoque" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
+            <th
+              className="align-middle text-center"
+              onClick={() => handleOrdenar("preco")}
+            >
+              Preço {campo === "preco" && (ordem === "asc" ? "↑" : "↓")}
+            </th>
             <th className="align-middle text-center">Ação</th>
           </tr>
         </thead>

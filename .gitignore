@@ -1,0 +1,50 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build directories
+build/
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs and text editors
+.vscode/
+.idea/
+*.swp
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# npm package-lock
+package-lock.json
+
+# Yarn lock file (If you're using Yarn instead of npm)
+yarn.lock
+
+# TypeScript declaration files
+*.d.ts
+
+# Jest cache
+jest-cache/
+
+# React Native
+.expo/
+
+# VSCode settings
+.vscode/

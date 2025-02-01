@@ -1,0 +1,7 @@
+body {
+    overflow-y: scroll;
+}
+
+a:hover {
+    cursor: pointer;
+}
